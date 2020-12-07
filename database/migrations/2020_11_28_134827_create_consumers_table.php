@@ -19,6 +19,9 @@ class CreateConsumersTable extends Migration
           $table->string('email')->unique();
           $table->timestamp('email_verified_at')->nullable();
           $table->string('password');
+          $table->string('contact');
+          $table->string('address', '500');
+          $table->integer('reviews_given')->default(0);
           $table->rememberToken();
           $table->timestamps();
         });

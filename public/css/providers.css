@@ -1,0 +1,71 @@
+body{
+  background: #eceff1;
+}
+#username{
+  font-size: 1.1em;
+  color: #607d8b;
+}
+#user-dropdown>a{
+  padding-left: 20px;
+  border-left: 1px solid #607d8b;
+  border-right: 1px solid #607d8b;
+}
+#user-dropdown>a>*{
+  vertical-align: middle;
+}
+#thumbnail{
+  width: 30px;
+  margin-right: 10px;
+}
+.dropdown-content li>a{
+  color: #546e7a;
+}
+.dropdown-content li>a:hover{
+  color: #2196f3;
+}
+
+
+
+.divider{
+  margin: 20px 0;
+}
+h5{
+  margin: 15px 0;
+}
+.customrow{
+  margin: 10px 0;
+}
+.customrow > *{
+  margin-bottom: 5px !important;
+}
+.fullbuttons, .fullbuttons2{
+  width: 100%;
+}
+
+.customcard{
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #efefef;
+  margin-bottom: 20px;
+}
+
+.customcard h6{
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #efefef;
+  /* margin-bottom: 5px; */
+}
+.customcard .content{
+  font-size: 0.95em;
+}
+.customcard .content p{
+  margin-bottom: 4px;
+}
+
+
+@media screen and (min-width: 992px){
+  
+  .fullbuttons2{
+    width: auto;
+  }
+}

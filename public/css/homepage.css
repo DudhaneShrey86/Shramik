@@ -1,0 +1,110 @@
+#header-content{
+  min-height: 80vh;
+  display: flex;
+  padding: 30px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  grid-gap: 20px;
+  text-align: center;
+}
+#header-content h3{
+  font-size: 2em;
+}
+.header-buttons a{
+  display: inline-block;
+  width: 100%;
+  margin: 10px 0px;
+  padding: 10px 20px;
+  border: 2px solid #1e88e5;
+  border-radius: 5px;
+  font-size: 1.2em;
+  color: #1e88e5;
+  transition: all 0.2s ease;
+}
+
+.header-buttons a:hover{
+  background: #1e88e5;
+  color: white;
+}
+
+section{
+  border-top: 1px solid #eeeeee;
+  padding: 50px 0;
+}
+#workflow .col{
+  margin-bottom: 30px;
+}
+
+#workflow .card-content p{
+  font-size: 1.15em;
+}
+
+#categories-div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+}
+#categories-div p{
+  margin: 10px 15px;
+}
+
+a{
+  color: inherit;
+}
+footer{
+  padding: 40px 20px;
+  color: #e3f2fd;
+}
+#footer-logo{
+  font-size: 2em;
+}
+#footer-grid{
+  display: flex;
+  grid-gap: 20px;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+.links{
+  margin: 7px 0;
+}
+
+.links a{
+  border-bottom: 1px solid transparent;
+}
+.links a:hover{
+  border-color: white;
+}
+
+.social-links{
+  margin: 10px;
+  font-size: 2.5em;
+  transition: all 0.2s ease;
+}
+.social-links:hover{
+  color: white;
+}
+
+@media screen and (min-width: 769px) {
+  #header-content h3{
+    font-size: 2.5em;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  #header-content h3{
+    font-size: 2.8em;
+  }
+  #footer-grid{
+    justify-content: space-between;
+    flex-direction: row;
+    text-align: left;
+  }
+  .social-links:first-of-type{
+    margin-left: 0;
+  }
+}

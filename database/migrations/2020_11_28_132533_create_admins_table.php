@@ -19,6 +19,7 @@ class CreateAdminsTable extends Migration
           $table->string('email')->unique();
           $table->string('password');
           $table->string('contact');
+          $table->integer('designation');
         });
     }
 

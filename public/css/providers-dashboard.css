@@ -1,0 +1,80 @@
+#flex-container{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column-reverse;
+}
+#big-div, #small-div{
+  flex: 100%;
+  max-width: 100%;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-card{
+  display: flex;
+  flex-direction: column;
+  grid-gap: 15px;
+  justify-content: space-between;
+}
+.button-div{
+  min-width: 150px;
+}
+.button-div button{
+  width: 100%;
+}
+
+.card-title{
+  font-weight: 400 !important;
+  font-size: 1.3em !important;
+}
+
+.rating-div{
+  position: relative;
+  margin-bottom: 10px;
+}
+.rating-div span{
+  color: #ffc107;
+}
+.rating-div p span{
+  margin-left: 10px;
+}
+
+#empty-notification-div{
+  max-width: 300px;
+  margin: 0 auto;
+}
+#empty-notification-div img{
+  width: 100%;
+}
+
+@media screen and (min-width: 600px){
+
+}
+
+@media screen and (min-width: 992px) {
+  #flex-container{
+    flex-direction: row;
+  }
+  #big-div{
+    flex: 70%;
+    max-width: 70%;
+  }
+  #small-div{
+    flex: 30%;
+    max-width: 30%;
+  }
+  .flex-card{
+    flex-direction: row;
+    align-items: center;
+  }
+  .card-title{
+    font-size: 1.6em !important;
+  }
+
+  .rating-span{
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

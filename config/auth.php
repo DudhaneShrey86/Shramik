@@ -46,6 +46,31 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'provider' => [
+            'driver' => 'session',
+            'provider' => 'providers',
+        ],
+
+        'provider-api' => [
+            'driver' => 'token',
+            'provider' => 'providers',
+        ],
+
+        'consumer' => [
+            'driver' => 'session',
+            'provider' => 'consumers',
+        ],
+
+        'consumer-api' => [
+            'driver' => 'token',
+            'provider' => 'consumers',
+        ],
     ],
 
     /*
@@ -69,6 +94,21 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+
+        'providers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Provider::class,
+        ],
+
+        'consumers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Consumer::class,
         ],
 
         // 'users' => [
@@ -98,6 +138,27 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
+        ],
+
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 15,
+            'throttle' => 15,
+        ],
+
+        'providers' => [
+            'provider' => 'providers',
+            'table' => 'password_resets',
+            'expire' => 15,
+            'throttle' => 15,
+        ],
+
+        'consumers' => [
+            'provider' => 'consumers',
+            'table' => 'password_resets',
+            'expire' => 15,
+            'throttle' => 15,
         ],
     ],
 

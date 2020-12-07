@@ -1,0 +1,31 @@
+.relativediv{
+  position: relative;
+}
+.links{
+  margin-top: 20px;
+  margin-right: 15px;
+  display: inline-block;
+}
+.links:last-child{
+  margin-right: 0px;
+}
+.paras{
+  margin-top: 20px !important;
+}
+.links:hover{
+  text-decoration: underline;
+}
+.collapsible-body{
+  padding: 15px;
+}
+embed{
+  width: 100%;
+  min-height: 300px;
+  border: 1px solid black;
+  height: calc(100% - 5px);
+  box-sizing: border-box;
+}
+.rightonlarge *{
+  vertical-align: middle;
+  margin:0px 4px;
+}

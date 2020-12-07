@@ -1,0 +1,95 @@
+body{
+  min-height: 100vh;
+}
+.zeroborder{
+  border: 0;
+}
+.zeropadding{
+  padding: 0 !important;
+}
+.lightborder{
+  border: 1px solid #e8e8e8;
+}
+.rightonlarge{
+  text-align: right;
+}
+.margintop{
+  margin-top: 10px !important;
+}
+.marginbottom{
+  margin-bottom: 10px !important;
+}
+.marginallbottom>*{
+  margin-bottom: 10px !important;
+}
+.nomarginall>*{
+  margin: 0 !important;
+}
+.marginright{
+  margin-right: 30px;
+}
+.smallmarginright{
+  margin-right: 15px;
+}
+.nomargin{
+  margin: 0;
+}
+.custommsgs{
+  padding: 15px !important;
+  margin: 0;
+  font-size: 1.4em;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+.custommsgs *{
+  vertical-align: middle;
+  margin:0 5px;
+}
+#confirmationmodal, #logoutmodal{
+  max-width: 700px;
+}
+#searchdiv{
+  margin-bottom: 0px;
+}
+#searchdiv > div{
+  padding: 0;
+}
+#search{
+  padding: 0px 10px;
+  box-sizing: border-box;
+}
+#searchdiv input, #searchdiv select{
+  margin: 0;
+  border: 0 !important;
+  outline: 0 !important;
+}
+#noparameter, #nofound{
+  display: none;
+}
+.absolutebuttons{
+  position: absolute;
+  right: 10px;
+}
+.underlined{
+  color: #42a5f5;
+}
+.underlined:hover{
+  text-decoration: underline;
+}
+
+.blank-div{
+  margin: 40px 0;
+}
+
+@media only screen and (max-width : 992px) {
+  .rightonlarge{
+    text-align: left;
+  }
+  #searchdiv input, #searchdiv select{
+    font-size: 0.97em;
+  }
+  #searchdiv span{
+    font-size: 0.97em;
+  }
+}
