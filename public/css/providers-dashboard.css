@@ -1,16 +1,3 @@
-#flex-container{
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column-reverse;
-}
-#big-div, #small-div{
-  flex: 100%;
-  max-width: 100%;
-  padding: 0 10px;
-  display: flex;
-  flex-direction: column;
-}
-
 .flex-card{
   display: flex;
   flex-direction: column;
@@ -53,17 +40,7 @@
 }
 
 @media screen and (min-width: 992px) {
-  #flex-container{
-    flex-direction: row;
-  }
-  #big-div{
-    flex: 70%;
-    max-width: 70%;
-  }
-  #small-div{
-    flex: 30%;
-    max-width: 30%;
-  }
+
   .flex-card{
     flex-direction: row;
     align-items: center;

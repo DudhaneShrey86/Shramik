@@ -23,9 +23,12 @@ class CreateProvidersTable extends Migration
           $table->string('password');
           $table->string('contact')->unique();
           $table->string('address', '500');
+          $table->string('locality');
+          $table->dateTime('last_seen');
+          $table->string('summary', '1000')->nullable();
           $table->string('business_document')->nullable();
           $table->string('aadhar_card')->nullable();
-          $table->string('profile_pic')->nullable();
+          $table->string('profile_pic')->default('/images/profile-user.png');
           $table->integer('is_approved')->default(1);
           $table->integer('reviews_gained')->default(0);
           $table->rememberToken();

@@ -25,6 +25,8 @@ class Provider extends Authenticatable implements MustVerifyEmail
         'password',
         'contact',
         'address',
+        'locality',
+        'summary',
         'business_document',
         'profile_pic',
         'aadhar_card',

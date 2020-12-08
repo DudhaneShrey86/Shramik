@@ -63,6 +63,7 @@ Route::prefix('/providers')->group(function(){
   Route::post('/email/verification-notification', [App\Http\Controllers\ProviderController::class, 'sendEmail'])->name('verification.send');
 
   Route::get('/profile/{provider}', [App\Http\Controllers\ProviderController::class, 'showProfile'])->name('providers.profile');
+  Route::post('/profile/{provider}', [App\Http\Controllers\ProviderController::class, 'updateProfile'])->name('providers.profile.submit');
 });
 
 Route::prefix('/consumers')->group(function(){

@@ -14,6 +14,7 @@ class ProviderLoginController extends Controller
 {
   public function __construct(){
     $this->middleware('guest:provider', ['except' => ['logout']]);
+    date_default_timezone_set("Asia/Kolkata");
   }
   public function showLoginForm(){
     return view('auth.providers-login');
@@ -40,7 +41,8 @@ class ProviderLoginController extends Controller
 
   public function showRegistrationForm(){
     $types = Type::all();
-    return view('auth.providers-register', ['types' => $types]);
+    $localities = Provider::distinct('locality')->pluck('locality');
+    return view('auth.providers-register', ['types' => $types, 'localities' => $localities]);
   }
 
   public function register(){
@@ -52,6 +54,7 @@ class ProviderLoginController extends Controller
       'password' => 'required|confirmed|min:8',
       'contact' => 'digits:10',
       'address' => 'required',
+      'locality' => 'required',
       'business_document' => 'required',
       'aadhar_card' => 'required',
     ]);

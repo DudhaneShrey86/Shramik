@@ -11,6 +11,7 @@
 @section('content')
 
 <div class="container">
+  <input type="hidden" id="localities" value="{{ $localities }}">
   <div class="row">
     <br>
     <div class="card col s12 l6 center offset-l3">
@@ -59,6 +60,12 @@
           <textarea name="address" id="address" class="materialize-textarea validate" ></textarea>
           <label for="address">Enter your address</label>
           <span class="helper-text" data-error="Required*" data-success="">@error('address') {{$message}} @enderror</span>
+        </div>
+        <div class="input-field col s12">
+          <input id="locality" name="locality" type="text" class="validate">
+          <label for="locality">Enter Your Locality</label>
+          <small>The locality of your business/shop</small>
+          <span class="helper-text" data-error="Required*" data-success="">@error('locality') {{$message}} @enderror</span>
         </div>
         <div class="fileinputs col s12">
           <input type="file" name="aadhar_card" id="aadhar_card" value="{{old('aadhar_card')}}" class="validate" >
@@ -111,5 +118,5 @@
 
 @endsection
 @section('scripts')
-
+<script src="/js/providers-register.js" charset="utf-8"></script>
 @endsection

@@ -24,7 +24,7 @@
         <li><a href="#">My Tasks</a></li>
         <li><a href="#">Messages</a></li>
         <li class="divider"></li>
-        <li><a href="#">View Profile</a></li>
+        <li><a href="{{ route('providers.profile', Auth::user()->id) }}">View Profile</a></li>
         <li><a href="#">Account Settings</a></li>
         <li><a href="#">Notifications</a></li>
         <li><a href="#">Guideline</a></li>
@@ -33,7 +33,7 @@
       </ul>
       <div class="navbar">
         <ul class="dropdown-content" id="userdropdown">
-          <li><a href="#">View Profile</a></li>
+          <li><a href="{{ route('providers.profile', Auth::user()->id) }}">View Profile</a></li>
           <li><a href="#">Account Settings</a></li>
           <li><a href="#">Notifications</a></li>
           <li><a href="#">Guideline</a></li>
@@ -41,7 +41,7 @@
         </ul>
         <nav class="blue darken-2">
           <div class="container nav-wrapper">
-            <a href="{{ route('home') }}" class="brand-logo">Shramik</a>
+            <a href="{{ route('providers.index') }}" class="brand-logo">Shramik</a>
             <a href="#!" data-target="side-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
               @if(Auth::user())
