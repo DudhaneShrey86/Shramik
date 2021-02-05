@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Auth;
 use App\Models\Provider;
+use App\Models\Task;
 
 class ProviderController extends Controller
 {
@@ -37,15 +38,16 @@ class ProviderController extends Controller
 
   public function sendEmail(Request $request){
     $request->user()->sendEmailVerificationNotification();
-    return back()->with('status', 'verification-link-sent');
+    return redirect()->back()->with('status', 'verification-link-sent');
   }
 
   public function showProfile(Provider $provider){
+    $tasks = $provider->tasks()->get();
     $canedit = false;
     if(Auth::guard('provider')->user()->id == $provider->id){
       $canedit = true;
     }
-    return view('providers.profile', ['provider' => $provider, 'canedit' => $canedit]);
+    return view('providers.profile', ['provider' => $provider, 'canedit' => $canedit, 'tasks' => $tasks]);
   }
 
   public function updateProfile(Provider $provider){
@@ -78,5 +80,48 @@ class ProviderController extends Controller
     $provider->update($data);
     $provider->save();
     return redirect()->back()->with('custommsg', 'Changes Saved!')->with('classes', 'green darken-1');
+  }
+
+  public function showTask(Task $task){
+    return view('providers.task.show', ['task' => $task]);
+  }
+  public function updateTask(Task $task){
+    $data = request()->validate([
+      'status' => 'required',
+    ]);
+    $task->update($data);
+    $task->save();
+    if($data['status'] == 0){
+      return redirect()->route('providers.index')->with('custommsg', 'Task Cancelled!')->with('classes', 'amber darken-1');
+    }
+    else if($data['status'] == 2){
+      $data = request()->validate([
+        "text" => "required",
+        "rating" => "required",
+      ]);
+      $data['provider_id'] = $task->provider_id;
+      $data['consumer_id'] = $task->consumer_id;
+      $review = $task->review()->create($data);
+      $provider = Provider::find($task->provider_id);
+      $consumer = Consumer::find($task->consumer_id);
+      $provider->reviews_gained += 1;
+      $provider->save();
+      $consumer->reviews_given += 1;
+      $consumer->save();
+      return redirect()->route('providers.index')->with('custommsg', 'Task Completed!')->with('classes', 'green darken-1');
+    }
+  }
+  public function showAllTasks(){
+    $provider = Auth::guard('provider')->user();
+    $tasks = $provider->tasks()->get();
+    return view('providers.task.showall', ['tasks' => $tasks]);
+  }
+  public function setLocation(Provider $provider){
+    $latitude = request()->latitude;
+    $longitude = request()->longitude;
+    $provider->latitude = $latitude;
+    $provider->longitude = $longitude;
+    $provider->save();
+    return redirect()->back()->with('custommsg', 'Location set successfully!')->with('classes', 'green darken-1');
   }
 }

@@ -1,0 +1,22 @@
+#ratingp{
+  padding: 10px 0;
+  color: #9e9e9e;
+  direction: rtl;
+}
+#ratingp .ratingicons{
+  font-size: 3em;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+#ratingp > i:hover, #ratingp > i:hover ~ i {
+  color: #607d8b;
+}
+.ratingicons.active{
+  color: #2196f3 !important;
+}
+#finishtaskdiv{
+  display: none;
+}
+#finishtaskdiv.active{
+  display: block;
+}

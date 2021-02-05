@@ -28,7 +28,7 @@
         </div>
       </div>
       @endif
-      @if($user->profile_pic == null)
+      @if($user->profile_pic == '/images/profile-user.png')
       <div class="card">
         <div class="card-content flex-card">
           <div class="text-div">
@@ -37,6 +37,19 @@
           </div>
           <div class="button-div">
             <a href="{{ route('providers.profile', Auth::user()->id) }}" class="btn fullbuttons">Update Pic</a>
+          </div>
+        </div>
+      </div>
+      @endif
+      @if($user->latitude == null)
+      <div class="card">
+        <div class="card-content flex-card">
+          <div class="text-div">
+            <p class="card-title marginbottom">Update My Business Location</p>
+            <p>Provider locations are used in consumer's search results</p>
+          </div>
+          <div class="button-div">
+            <a href="{{ route('providers.profile', Auth::user()->id) }}" class="btn fullbuttons">Update Location</a>
           </div>
         </div>
       </div>
@@ -172,17 +185,35 @@
     <div id="small-div">
       <div class="card">
         <div class="card-content">
+          @php
+          $tasks = "-";
+          if($user->reviews_gained != 0){
+            $tasks = $user->reviews_gained;
+          }
+          $avg_rating = "-";
+          $reviews = $user->reviews()->get();
+          $count = count($reviews);
+          if($count != 0){
+            $v = 0;
+            foreach($reviews as $review){
+              $v += $review->rating;
+            }
+            $avg_rating = $v / $count;
+            $avg_rating = number_format((float)$avg_rating, 2, '.', '');
+            $avg_rating = $avg_rating."/5";
+          }
+          @endphp
           <h5>Welcome {{ explode(" ", Auth::user()->name)[0] }}</h5>
           <div class="divider">
 
           </div>
           <div class="customrow">
             <p>Your Provider Rating</p>
-            <b>-</b>
+            <b>{{ $avg_rating }}</b>
           </div>
           <div class="customrow">
             <p>Tasks completed</p>
-            <b>-</b>
+            <b>{{ $tasks }}</b>
           </div>
           <div class="customrow">
             <p>Update Your Profile</p>

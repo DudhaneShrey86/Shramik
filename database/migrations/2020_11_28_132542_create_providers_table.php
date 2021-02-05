@@ -24,7 +24,9 @@ class CreateProvidersTable extends Migration
           $table->string('contact')->unique();
           $table->string('address', '500');
           $table->string('locality');
-          $table->dateTime('last_seen');
+          $table->float('latitude', 10, 7)->nullable();
+          $table->float('longitude', 10, 7)->nullable();
+          $table->dateTime('last_seen')->nullable();
           $table->string('summary', '1000')->nullable();
           $table->string('business_document')->nullable();
           $table->string('aadhar_card')->nullable();

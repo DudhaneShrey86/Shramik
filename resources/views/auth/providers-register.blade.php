@@ -58,13 +58,13 @@
         </div>
         <div class="input-field col s12">
           <textarea name="address" id="address" class="materialize-textarea validate" ></textarea>
-          <label for="address">Enter your address</label>
+          <label for="address">Enter your Business Address</label>
           <span class="helper-text" data-error="Required*" data-success="">@error('address') {{$message}} @enderror</span>
         </div>
         <div class="input-field col s12">
           <input id="locality" name="locality" type="text" class="validate">
           <label for="locality">Enter Your Locality</label>
-          <small>The locality of your business/shop</small>
+          <small>The locality of your business/shop. It can be changed later</small>
           <span class="helper-text" data-error="Required*" data-success="">@error('locality') {{$message}} @enderror</span>
         </div>
         <div class="fileinputs col s12">

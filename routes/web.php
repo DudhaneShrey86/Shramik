@@ -22,7 +22,6 @@ Route::prefix('/admins')->group(function(){
 
   Route::get('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'showLoginForm'])->name('admins.login');
   Route::post('/login', [App\Http\Controllers\Auth\AdminLoginController::class, 'login'])->name('admins.login.submit');
-  Route::get('/', [App\Http\Controllers\AdminController::class, 'index'])->name('admins.index');
   Route::get('/logout', [App\Http\Controllers\Auth\AdminLoginController::class, 'logout'])->name('admins.logout');
 
   Route::get('/', [App\Http\Controllers\AdminController::class, 'index'])->name('admins.index');
@@ -64,6 +63,12 @@ Route::prefix('/providers')->group(function(){
 
   Route::get('/profile/{provider}', [App\Http\Controllers\ProviderController::class, 'showProfile'])->name('providers.profile');
   Route::post('/profile/{provider}', [App\Http\Controllers\ProviderController::class, 'updateProfile'])->name('providers.profile.submit');
+
+  Route::get('/tasks', [App\Http\Controllers\ProviderController::class, 'showAllTasks'])->name('providers.task.showall');
+
+  Route::get('/task/{task}', [App\Http\Controllers\ProviderController::class, 'showTask'])->name('providers.task.show');
+  Route::post('/task/{task}', [App\Http\Controllers\ProviderController::class, 'updateTask'])->name('providers.task.update');
+  Route::post('/setlocation/{provider}', [App\Http\Controllers\ProviderController::class, 'setLocation'])->name('providers.setlocation');
 });
 
 Route::prefix('/consumers')->group(function(){
@@ -74,4 +79,16 @@ Route::prefix('/consumers')->group(function(){
 
   Route::get('/register', [App\Http\Controllers\Auth\ConsumerLoginController::class, 'showRegistrationForm'])->name('consumers.register');
   Route::post('/register', [App\Http\Controllers\Auth\ConsumerLoginController::class, 'register'])->name('consumers.register.submit');
+
+  Route::get('/tasks', [App\Http\Controllers\ConsumerController::class, 'showAllTasks'])->name('consumers.task.showall');
+  Route::get('/task/{task}', [App\Http\Controllers\ConsumerController::class, 'showTask'])->name('consumers.task.show');
+  Route::post('/task/{task}', [App\Http\Controllers\ConsumerController::class, 'updateTask'])->name('consumers.task.update');
+  Route::get('/search', [App\Http\Controllers\ConsumerController::class, 'searchServices'])->name('consumers.search');
+  Route::get('/search-service', [App\Http\Controllers\ConsumerController::class, 'showProviders'])->name('consumers.show');
+  Route::get('/hire/{provider}', [App\Http\Controllers\ConsumerController::class, 'showHirePage'])->name('consumers.hire.show');
+  Route::post('/hire/{provider}', [App\Http\Controllers\ConsumerController::class, 'startTask'])->name('consumers.hire.start');
+  Route::get('/profile/{consumer}', [App\Http\Controllers\ConsumerController::class, 'showProfile'])->name('consumers.profile');
+  Route::post('/profile/{consumer}', [App\Http\Controllers\ConsumerController::class, 'updateProfile'])->name('consumers.profile.submit');
+
+  Route::post('/setlocation/{consumer}', [App\Http\Controllers\ConsumerController::class, 'setLocation'])->name('consumers.setlocation');
 });

@@ -16,35 +16,35 @@
       <ul class="sidenav" id="side-menu">
         <li>
           <div class="user-view">
-            <a href="#name"><span id="username">Hello, {{Auth::user()->name ?? ''}}</span></a>
+            <a href="#name"><span id="username">Hello, {{Auth::user()->name ?? ''}}</span></a><br>
             <a href="#email"><span id="email">{{Auth::user()->email ?? ''}}</span></a>
           </div>
         </li>
         <li class="divider"></li>
-        <li><a href="{{ route('providers.task.showall') }}">My Tasks</a></li>
+        <li><a href="{{ route('consumers.search') }}">Hire A Service</a></li>
+        <li><a href="{{ route('consumers.task.showall') }}">Tasks</a></li>
         <li class="divider"></li>
-        <li><a href="{{ route('providers.profile', Auth::user()->id) }}">View Profile</a></li>
+        <li><a href="{{ route('consumers.profile', Auth::user()->id) }}">View Profile</a></li>
         <li><a href="#">Account Settings</a></li>
         <li><a href="#">Notifications</a></li>
-        <li><a href="#">Guideline</a></li>
         <li><a class="waves-effect modal-trigger" href="#logoutmodal">Logout</a></li>
         <li class="divider"></li>
       </ul>
       <div class="navbar">
         <ul class="dropdown-content" id="userdropdown">
-          <li><a href="{{ route('providers.profile', Auth::user()->id) }}">View Profile</a></li>
+          <li><a href="{{ route('consumers.profile', Auth::user()->id) }}">View Profile</a></li>
           <li><a href="#">Account Settings</a></li>
           <li><a href="#">Notifications</a></li>
-          <li><a href="#">Guideline</a></li>
           <li><a href="#logoutmodal" class="modal-trigger">Logout</a></li>
         </ul>
         <nav class="blue darken-2">
           <div class="container nav-wrapper">
-            <a href="{{ route('providers.index') }}" class="brand-logo">Shramik</a>
+            <a href="{{ route('consumers.index') }}" class="brand-logo">Shramik</a>
             <a href="#!" data-target="side-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
               @if(Auth::user())
-              <li><a href="{{ route('providers.task.showall') }}">My Tasks</a></li>
+              <li><a href="{{ route('consumers.search') }}">Hire A Service</a></li>
+              <li><a href="{{ route('consumers.task.showall') }}">Tasks</a></li>
               <li><a href="#"><i class="material-icons">notifications_none</i></a></li>
               <li id="user-dropdown">
                 <a href="#!" data-target="userdropdown" class="dropdown-trigger">
@@ -53,7 +53,7 @@
                 </a>
               </li>
               @else
-              <li><a href="{{ route('providers.index') }}">Login</a></li>
+              <li><a href="{{ route('consumers.index') }}">Login</a></li>
               @endif
             </ul>
           </div>
@@ -66,7 +66,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn modal-close waves-effect waves-light white teal-text">Cancel</button>
-          <a href="{{ route('providers.logout') }}" class="btn modal-close waves-effect waves-light">Logout</a>
+          <a href="{{ route('consumers.logout') }}" class="btn modal-close waves-effect waves-light">Logout</a>
         </div>
       </div>
     </header>

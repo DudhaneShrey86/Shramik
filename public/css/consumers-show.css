@@ -1,0 +1,22 @@
+.row h6{
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+.col{
+  margin-bottom: 10px;
+}
+.col p{
+  margin-bottom: 5px !important;
+}
+.vertical-align *{
+  vertical-align: middle;
+}
+#start-task-form{
+  max-width: 600px;
+}
+#start-task-form h6{
+  margin-bottom: 30px !important;
+}
+#start-task-form *{
+  margin-bottom: 20px !important;
+}

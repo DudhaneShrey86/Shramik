@@ -19,10 +19,11 @@ class Consumer extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'email_verified_at',
         'password',
         'contact',
         'address',
+        'locality',
+        'profile_pic',
     ];
 
     /**
@@ -45,4 +46,11 @@ class Consumer extends Authenticatable
      ];
 
      protected $guard = 'consumer';
+
+     public function tasks(){
+       return $this->hasMany('App\Models\Task');
+     }
+     public function reviews(){
+       return $this->hasMany('App\Models\Review');
+     }
 }

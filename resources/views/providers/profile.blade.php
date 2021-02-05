@@ -75,14 +75,42 @@ function time_elapsed_string($datetime, $full = false) {
                   <p class="blue-grey-text"><b>{{ $provider->type()->first()->name }}</b></p>
                 </div>
                 <div>
+                  @php
+                  $avg_rating = 0;
+                  $reviews = $provider->reviews()->get();
+                  $count = count($reviews);
+                  if($count != 0){
+                    $v = 0;
+                    foreach($reviews as $review){
+                      $v += $review->rating;
+                    }
+                    $avg_rating = $v / $count;
+                  }
+                  @endphp
                   <div class="col s12 l6">
-                    <p>Rating:</p>
+                    <p>Average Rating:</p>
                     <p>
-                      <i class="material-icons amber-text">star</i>
-                      <i class="material-icons amber-text">star</i>
-                      <i class="material-icons amber-text">star</i>
-                      <i class="material-icons amber-text">star</i>
-                      <i class="material-icons amber-text">star</i>
+                      <span>
+                        <?php
+                        for($i = 1; $i <= 5; $i++){
+                          if($i <= $avg_rating){
+                            ?>
+                            <i class="material-icons amber-text">star</i>
+                            <?php
+                          }
+                          else if(($i - $avg_rating) <= 0.5){
+                            ?>
+                            <i class="material-icons amber-text">star_half</i>
+                            <?php
+                          }
+                          else{
+                            ?>
+                            <i class="material-icons amber-text">star_border</i>
+                            <?php
+                          }
+                        }
+                        ?>
+                      </span>
                     </p>
                   </div>
                   <div class="col s12 l6">
@@ -173,15 +201,23 @@ function time_elapsed_string($datetime, $full = false) {
                 </div>
                 <div class="col s12">
                   <p>Reviews Gained</p>
-                  @if($provider->reviews_gained == 0)
-                  <p class="blue-grey-text"><b>-</b></p>
-                  @else
-                  <p class="blue-grey-text"><b>{{ $provider->reviews_gained }}</b></p>
-                  @endif
+                  @php
+                  $count = $provider->reviews_gained;
+                  if($count == 0){
+                    $count = "-";
+                  }
+                  @endphp
+                  <p class="blue-grey-text"><b>{{ $count }}</b></p>
                 </div>
                 <div class="col s12">
                   <p>Jobs Done</p>
-                  <p class="blue-grey-text"><b>-</b></p>
+                  @php
+                  $count = count($tasks);
+                  if($count == 0){
+                    $count = "-";
+                  }
+                  @endphp
+                  <p class="blue-grey-text"><b>{{ $count }}</b></p>
                 </div>
               </div>
             </div>
@@ -189,38 +225,115 @@ function time_elapsed_string($datetime, $full = false) {
         </div>
       </div>
     </div>
-    <div class="card" id="reviews">
+    @if($canedit)
+    <div class="card" id="location">
       <div class="card-content">
-        <h5>Reviews <small class="right">0 reviews</small></h5>
+        <h5>Set Business Location</h5>
         <div class="divider">
 
         </div>
         <div>
+          <p>Your location will help us to rank you in respective consumer's search results</p>
+          <p class="amber-text text-darken-2"><small>This location is visible to everyone</small></p>
+          <div id="locationmap" class="lightborder">
+            <p class="flow-text">Space for maps</p>
+          </div>
+          <div>
+            <p>Use the button below to set your location</p>
+            <p class="marginbottom"><small id="erroroutput">Make sure to allow location access</small></p>
+            <form id="form" action="{{ route('providers.setlocation', $provider->id) }}" method="post">
+              @csrf
+              <input type="hidden" name="latitude" id="latitude" value="">
+              <input type="hidden" name="longitude" id="longitude" value="">
+              @php
+              $str = '';
+              if($provider->latitude == null){
+                $str = 'Set Location';
+              }
+              else{
+                $str = 'Update Location';
+              }
+              @endphp
+              <p><button type="button" onclick="setLocation()" id="setlocation" class="btn blue">{{ $str }}</button></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    @else
+    <div class="card" id="location">
+      <div class="card-content">
+        <h5>Business Location</h5>
+        <div class="divider">
+
+        </div>
+        <div>
+          <div id="locationmap" class="lightborder">
+            <p class="flow-text">Space for maps</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    @endif
+    <div class="card" id="reviews">
+      <div class="card-content">
+        <h5>Reviews <small class="right">{{ $provider->reviews_gained }} reviews</small></h5>
+        <div class="divider">
+
+        </div>
+        <div>
+          @forelse($tasks as $task)
+          @php
+          $review = $task->review()->first();
+          $consumer = $task->consumer()->first();
+          @endphp
           <div class="customcard">
             <div class="row marginbottom">
               <div class="col s12 l6">
-                <p><a href="#" class="underlined">Some Task</a></p>
+                <p><a href="{{ route('providers.task.show', $task->id) }}" target="_blank" class="underlined">{{ $task->title }}</a></p>
               </div>
               <div class="col s12 l6 rightonlarge">
                 <span>
-                  <i class="material-icons amber-text">star</i>
-                  <i class="material-icons amber-text">star</i>
-                  <i class="material-icons amber-text">star</i>
-                  <i class="material-icons amber-text">star</i>
-                  <i class="material-icons amber-text">star</i>
+                  <?php
+                  $rating = $review->rating;
+                  $str = "";
+                  for($i = 1; $i <= 5; $i++){
+                    if($i <= $rating){
+                      ?>
+                      <i class="material-icons amber-text">star</i>
+                      <?php
+                    }
+                    else if(($i - $rating) <= 0.5){
+                      ?>
+                      <i class="material-icons amber-text">star_half</i>
+                      <?php
+                    }
+                    else{
+                      ?>
+                      <i class="material-icons amber-text">star_border</i>
+                      <?php
+                    }
+                  }
+                  ?>
                 </span>
               </div>
               <div class="col s12">
                 <p class="small-text">
-                  <i>"Test was the best in the business!"</i>
+                  <i>"{{ $review->text }}"</i>
                 </p>
               </div>
               <div class="col s12">
-                <p>- <a href="#" class="underlined">Some Person</a> </p>
+                <p>- <a href="#" class="underlined">{{ $consumer->name }}</a> </p>
               </div>
             </div>
-            <p><small>{{ time_elapsed_string('2020-12-08 02:04:38') }}</small></p>
+            <p><small>{{ time_elapsed_string($task->created_at) }}</small></p>
           </div>
+          @empty
+          <div class="customcard">
+            <p class="flow-text">No Reviews Found!</p>
+            <p class="grey-text"><i>Keep your profile updated to get more opportunities</i></p>
+          </div>
+          @endforelse
         </div>
       </div>
     </div>

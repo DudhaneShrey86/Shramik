@@ -40,6 +40,8 @@ class ProviderLoginController extends Controller
   }
 
   public function showRegistrationForm(){
+    // $provider = new Provider();
+    // $provider->test_models_can_be_persisted();
     $types = Type::all();
     $localities = Provider::distinct('locality')->pluck('locality');
     return view('auth.providers-register', ['types' => $types, 'localities' => $localities]);

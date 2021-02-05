@@ -6,6 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Provider;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Str;
 
 class Provider extends Authenticatable implements MustVerifyEmail
 {
@@ -26,6 +29,7 @@ class Provider extends Authenticatable implements MustVerifyEmail
         'contact',
         'address',
         'locality',
+        'last_seen',
         'summary',
         'business_document',
         'profile_pic',
@@ -57,5 +61,20 @@ class Provider extends Authenticatable implements MustVerifyEmail
 
      public function type(){
        return $this->belongsTo('App\Models\Type');
+     }
+     public function tasks(){
+       return $this->hasMany('App\Models\Task');
+     }
+     public function reviews(){
+       return $this->hasMany('App\Models\Review');
+     }
+
+     public function run_factory(){
+       $providers = Provider::factory()->count(30)->state(new Sequence(
+         ['locality' => 'Amrai'],
+         ['locality' => 'Vijaynagar'],
+         ['locality' => 'Chinchpada'],
+         ['locality' => 'Tisgaon'],
+         ))->create();
      }
 }

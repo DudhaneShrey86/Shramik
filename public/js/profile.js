@@ -10,6 +10,39 @@ function endedit(){
   $('#editbutton').addClass('active');
 }
 
+function setLocation(){
+  if(navigator.geolocation){
+    var geo = navigator.geolocation;
+    geo.getCurrentPosition(showPosition, showError);
+  }
+}
+function showPosition(position){
+  var lat = position.coords.latitude;
+  var lon = position.coords.longitude;
+  $('#latitude').val(lat);
+  $('#longitude').val(lon);
+  $('#form').submit();
+}
+function showError(error){
+  var p = $('#erroroutput');
+  p.removeClass('amber-text text-darken-1');
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      p.text('Please make sure to allow location access');
+      p.addClass('amber-text text-darken-1');
+      break;
+    case error.POSITION_UNAVAILABLE:
+      p.text('Position unavailable');
+      p.addClass('amber-text text-darken-1');
+      break;
+    case error.UNKNOWN_ERROR:
+      p.text('Some error occured');
+      p.addClass('amber-text text-darken-1');
+      break;
+  }
+}
+
+
 $(document).ready(function(){
   $('#editbutton').click(function(){
     startedit();

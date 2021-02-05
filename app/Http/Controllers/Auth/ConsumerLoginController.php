@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\Consumer;
+use App\Models\Provider;
 use Illuminate\Support\Facades\Hash;
 
 class ConsumerLoginController extends Controller
 {
   public function __construct(){
     $this->middleware('guest:consumer', ['except' => ['logout']]);
+    date_default_timezone_set("Asia/Kolkata");
   }
   public function showLoginForm(){
     return view('auth.consumers-login');
@@ -23,7 +25,7 @@ class ConsumerLoginController extends Controller
     ]);
     if(Auth::guard('consumer')->attempt(['email' => request()->email, 'password' => request()->password], request()->remember)){
       ///////changes here////////////
-      return redirect()->intended(route('consumers.index'));
+      return redirect()->route('consumers.index');
     }
     else{
       return redirect()->back()->withErrors(['Incorrect Email Or Password']);
@@ -37,7 +39,8 @@ class ConsumerLoginController extends Controller
   }
 
   public function showRegistrationForm(){
-    return view('auth.consumers-register');
+    $localities = Provider::distinct('locality')->pluck('locality');
+    return view('auth.consumers-register', ['localities' => $localities]);
   }
 
   public function register(){
@@ -47,6 +50,7 @@ class ConsumerLoginController extends Controller
       'password' => 'required|confirmed|min:8',
       'contact' => 'digits:10',
       'address' => 'required',
+      'locality' => 'required',
     ]);
     $data['password'] = Hash::make($data['password']);
     $consumer = Consumer::create($data);
