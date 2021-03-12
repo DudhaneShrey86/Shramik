@@ -70,11 +70,21 @@ class Provider extends Authenticatable implements MustVerifyEmail
      }
 
      public function run_factory(){
-       $providers = Provider::factory()->count(30)->state(new Sequence(
+       $providers = Provider::factory()->count(100)->state(new Sequence(
          ['locality' => 'Amrai'],
          ['locality' => 'Vijaynagar'],
          ['locality' => 'Chinchpada'],
          ['locality' => 'Tisgaon'],
+         ['locality' => 'Manpada'],
+         ['locality' => 'Khadakpada'],
+         ['locality' => 'Godrej Hill'],
+         ['locality' => 'Ambivili'],
+         ['locality' => 'Kongaon'],
+         ['locality' => 'Manere Gaon'],
+         ['locality' => 'Nevali'],
+         ['locality' => 'Shilphata'],
+         ['locality' => 'Nevali'],
+
          ))->create();
      }
 }

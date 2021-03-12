@@ -25,7 +25,6 @@
         <li><a href="{{ route('consumers.task.showall') }}">Tasks</a></li>
         <li class="divider"></li>
         <li><a href="{{ route('consumers.profile', Auth::user()->id) }}">View Profile</a></li>
-        <li><a href="#">Account Settings</a></li>
         <li><a href="#">Notifications</a></li>
         <li><a class="waves-effect modal-trigger" href="#logoutmodal">Logout</a></li>
         <li class="divider"></li>
@@ -33,7 +32,6 @@
       <div class="navbar">
         <ul class="dropdown-content" id="userdropdown">
           <li><a href="{{ route('consumers.profile', Auth::user()->id) }}">View Profile</a></li>
-          <li><a href="#">Account Settings</a></li>
           <li><a href="#">Notifications</a></li>
           <li><a href="#logoutmodal" class="modal-trigger">Logout</a></li>
         </ul>

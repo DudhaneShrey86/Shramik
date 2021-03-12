@@ -9,6 +9,8 @@ use App\Models\Provider;
 use App\Models\Type;
 use App\Models\Task;
 use App\Models\Review;
+use App\Notifications;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
 
@@ -49,7 +51,7 @@ class ConsumerController extends Controller
 
       $filename1 = str_replace(basename($filename1, ".".$ext1), "profile_pic", $filename1);
 
-      $filename1 = $provider->id."_".$filename1;
+      $filename1 = $consumer->id."_".$filename1;
 
       $path = public_path().'/Documents/ConsumerProfilePic/';
 
@@ -70,6 +72,14 @@ class ConsumerController extends Controller
   }
   public function showProviders(){
     $types = Type::all();
+    $avg_distance = request()->avg_distance;
+    $deviation_distance = request()->deviation_distance;
+    $avg_rating = request()->avg_rating;
+    $deviation_rating = request()->deviation_rating;
+    $recommended_provider = null;
+    $peoples_choice_provider = null;
+    $upcoming_provider = null;
+
     $localities = Provider::distinct('locality')->pluck('locality');
     if(!request()->has('type_id') || !request()->has('locality')){
       return redirect()->back()->with('custommsg', 'Some error occured...')->with('classes', 'amber darken-1');
@@ -78,37 +88,100 @@ class ConsumerController extends Controller
     $longitude = floatval(request()->longitude);
     $type_id = request()->type_id;
     $locality = request()->locality;
-
     if($latitude != '' && $longitude != ''){
+      // $providers = Provider::where([
+      //   ['type_id', '=', $type_id],
+      //   ['is_approved', '<>', 0],
+      // ])->whereNotNull('latitude')
+      // ->orderBy('is_approved', 'DESC')
+      // ->orderBy(DB::raw('ABS(latitude - '.$latitude.') + ABS(longitude - '.$longitude.')'), 'ASC')
+      // ->orderBy('reviews_gained', 'DESC')
+      // ->orderBy('last_seen', 'DESC')
+      // ->orderBy('created_at', 'ASC')
+      // ->get();
       $providers = Provider::where([
         ['type_id', '=', $type_id],
         ['is_approved', '<>', 0],
-      ])
-      ->orderBy('is_approved', 'DESC')
+      ])->whereNotNull('latitude')
       ->orderBy(DB::raw('ABS(latitude - '.$latitude.') + ABS(longitude - '.$longitude.')'), 'ASC')
       ->orderBy('reviews_gained', 'DESC')
-      ->orderBy('last_seen', 'DESC')
-      ->orderBy('created_at', 'ASC')
       ->get();
+
+      // $recommended_provider = Provider::where(function($query) use ($avg_rating, $deviation_rating){
+      //
+      // })->get();
+      if($avg_distance != 0){
+        $recommended_provider = Provider::where('type_id', '=', $type_id)->where(DB::raw('ASIN(SQRT(POW(SIN(ABS(RADIANS(latitude) - RADIANS('.$latitude.')) / 2), 2) + (COS('.$latitude.') * COS(latitude) * POW(SIN(ABS(RADIANS(longitude) - RADIANS('.$longitude.'))/2), 2)))) * 6371 * 2'), '<', $avg_distance + $deviation_distance);
+        if($avg_rating != 0){
+          $recommended_rating = Review::select(DB::raw('AVG(rating) as avg_rating, provider_id'))->orderBy('avg_rating', 'desc')->groupBy('provider_id')->having('avg_rating', '>=', $avg_rating - $deviation_rating)->take(30)->get();
+          $provider_ids = [];
+          foreach ($recommended_rating as $r) {
+            array_push($provider_ids, $r->provider_id);
+          }
+          $recommended_provider = $recommended_provider->whereIn('id', $provider_ids);
+        }
+
+        $recommended_provider = $recommended_provider->orderBy((DB::raw('ASIN(SQRT(POW(SIN(ABS(RADIANS(latitude) - RADIANS('.$latitude.')) / 2), 2) + (COS('.$latitude.') * COS(latitude) * POW(SIN(ABS(RADIANS(longitude) - RADIANS('.$longitude.'))/2), 2)))) * 6371 * 2')), 'asc')->take(1)->get();
+      }
+
+      // upcoming
+      $today = date_create();
+      $days_before = date_create();
+      date_sub($days_before, date_interval_create_from_date_string("7 days"));
+      $recommended_upcoming_task = Task::select(DB::raw('COUNT(*) as count_tasks, provider_id'))->orderBy('count_tasks', 'desc')->groupBy('provider_id')->whereBetween('created_at', [$days_before, $today]);
+      $providers_type = Type::find($type_id)->providers;
+      $providers_id_arr = [];
+      foreach ($providers_type as $value) {
+        array_push($providers_id_arr, $value->id);
+      }
+      $recommended_upcoming_task = $recommended_upcoming_task->whereIn('provider_id', $providers_id_arr)->take(1)->get();
+      $upcoming_provider = Provider::where('id', $recommended_upcoming_task[0]->provider_id)->first();
     }
     else{
+      // $providers = Provider::where([
+      //   ['type_id', '=', $type_id],
+      //   ['locality', '=', $locality],
+      //   ['is_approved', '<>', 0],
+      // ])
+      // ->orderBy('is_approved', 'DESC')
+      // ->orderBy('reviews_gained', 'DESC')
+      // ->orderBy('last_seen', 'DESC')
+      // ->orderBy('created_at', 'ASC')
+      // ->get();
       $providers = Provider::where([
         ['type_id', '=', $type_id],
         ['locality', '=', $locality],
         ['is_approved', '<>', 0],
       ])
-      ->orderBy('is_approved', 'DESC')
       ->orderBy('reviews_gained', 'DESC')
-      ->orderBy('last_seen', 'DESC')
-      ->orderBy('created_at', 'ASC')
       ->get();
     }
-    return view('consumers.search', ['types' => $types, 'localities' => $localities, 'providers' => $providers, 'latitude' => $latitude, 'longitude' => $longitude]);
+
+    // dd(count($recommended_provider));
+    return view('consumers.search', ['types' => $types, 'localities' => $localities, 'recommended_provider' => $recommended_provider, 'upcoming_provider' => $upcoming_provider, 'providers' => $providers, 'latitude' => $latitude, 'longitude' => $longitude]);
   }
 
   public function showHirePage(Provider $provider){
     return view('consumers.hire.show', ['provider' => $provider]);
   }
+
+  //////////send notification//////////
+  public function sendnotification($provider, $consumer, $task, $actiontype){
+    if($actiontype == '1'){
+      $consumer->notify(new Notifications\HiredProvider($provider, $consumer, $task));
+      $provider->notify(new Notifications\HiredProvider($provider, $consumer, $task));
+    }
+    else if($actiontype == '0'){
+      $consumer->notify(new Notifications\CancelledProvider($provider, $consumer, $task));
+      $provider->notify(new Notifications\CancelledProvider($provider, $consumer, $task));
+    }
+    else if($actiontype == '2'){
+      $consumer->notify(new Notifications\TaskCompletedProvider($provider, $consumer, $task));
+      $provider->notify(new Notifications\TaskCompletedProvider($provider, $consumer, $task));
+    }
+    return true;
+  }
+
   public function startTask(Provider $provider){
     $data = request()->validate([
       'title' => 'required',
@@ -116,18 +189,22 @@ class ConsumerController extends Controller
     ]);
     $data['consumer_id'] = Auth::guard('consumer')->user()->id;
     $task = $provider->tasks()->create($data);
+    $this->sendnotification($provider, Auth::guard('consumer')->user(), $task, '1');
     return redirect()->route('consumers.task.show', $task->id)->with('custommsg', 'Task Created!')->with('classes', 'green darken-1');
   }
 
   public function showTask(Task $task){
     return view('consumers.task.show', ['task' => $task]);
   }
+
   public function updateTask(Task $task){
     $data = request()->validate([
       'status' => 'required',
     ]);
     $task->update($data);
     $task->save();
+    $provider = $task->provider;
+    $this->sendnotification($provider, Auth::guard('consumer')->user(), $task, $data['status']);
     if($data['status'] == 0){
       return redirect()->route('consumers.index')->with('custommsg', 'Task Cancelled!')->with('classes', 'amber darken-1');
     }

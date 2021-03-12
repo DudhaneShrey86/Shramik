@@ -35,6 +35,10 @@
   width: 100%;
 }
 
+.newnotification{
+  border-left: 4px solid #2962ff !important;
+}
+
 @media screen and (min-width: 600px){
 
 }

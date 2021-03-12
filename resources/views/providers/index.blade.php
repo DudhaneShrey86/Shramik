@@ -64,19 +64,24 @@
           @php
           $data = $notification->data;
           $type = $data['type'];
+          $class = "";
+          if($notification->read_at == null){
+            $class = "newnotification";
+          }
+          $task = Auth::guard('provider')->user()->tasks()->find($data['task_id']);
+          $consumer = $task->consumer()->find($data['consumer_id']);
           @endphp
           <?php
           switch($type){
             case 'Accepted Application':
             ?>
-            <div class="customcard">
-              <h6>Account Verified</h6>
+            <div class="customcard {{ $class }}">
+              <h6 class="valign-wrapper"><span class="">Account Verified!</span>&nbsp;<i class="material-icons green-text">check</i> </h6>
               <div class="content">
                 <p>Congratulations! Your account has been verified.</p>
                 <p>Verified accounts often rank higher in search lists - <a href="#" class="underlined">know more here</a> </p>
               </div>
             </div>
-
 
             <?php
               break;
@@ -100,9 +105,9 @@
             <div class="customcard">
               <h6>Task Cancelled</h6>
               <div class="content">
-                <p>The task "<a href="#" class="underlined">Some Task</a>" by <a href="#" class="underlined">Some Person</a> was cancelled.</p>
+                <p>The task "<a href="{{route('providers.task.show', $task->id) }}" class="underlined">{{ $task->name }}</a>" by <b>{{ $consumer->name }}</b> was cancelled.</p>
                 <p>Keep trying!</p>
-                <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
+                <a href="{{route('providers.task.show', $task->id) }}" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
             </div>
 
@@ -114,8 +119,8 @@
             <div class="customcard">
               <h6>Hired for a task</h6>
               <div class="content">
-                <p>You were hired by <a href="#" class="underlined">Some Person</a> for the task "<a href="#" class="underlined">Some Task Name</a>"</p>
-                <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
+                <p>You were hired by <b>{{ $consumer->name }}</b> for the task "<a href="{{route('providers.task.show', $task->id) }}" class="underlined">{{ $task->title }}</a>"</p>
+                <a href="{{route('providers.task.show', $task->id) }}" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
             </div>
 
@@ -127,7 +132,7 @@
             <div class="customcard">
               <h6>Review Gained</h6>
               <div class="content">
-                <p><a href="#" class="underlined">Some Person</a> provided their review on your performance for the task "<a href="#" class="underlined">Some Task</a>"</p>
+                <p><b>{{ $Tconsumer->name }}</b> provided their review on your performance for the task "<a href="{{route('providers.task.show', $task->id) }}" class="underlined">{{ $task->name }}</a>"</p>
                 <div class="rating-div">
                   <p><b>Rating Given: <span>4.5/5</span></b></p>
                   <span class="rating-span">
@@ -141,7 +146,7 @@
                     ?>
                   </span>
                 </div>
-                <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
+                <a href="{{route('providers.task.show', $task->id) }}" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
             </div>
 
@@ -178,7 +183,9 @@
             <p><i>Start doing stuff - complete your profile, read the guidelines or provide services!</i></p>
           </div>
           @endforelse
-
+          @php
+          $notifications->markAsRead();
+          @endphp
         </div>
       </div>
     </div>

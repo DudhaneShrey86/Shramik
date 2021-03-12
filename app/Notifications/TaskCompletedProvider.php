@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Provider;
 use App\Models\Consumer;
-// use App\Models\Task;
+use App\Models\Task;
 
 
 class TaskCompletedProvider extends Notification
@@ -20,11 +20,11 @@ class TaskCompletedProvider extends Notification
      *
      * @return void
      */
-    public function __construct(Provider $provider, Consumer $consumer)
+    public function __construct(Provider $provider, Consumer $consumer, Task $task)
     {
       $this->provider = $provider;
       $this->consumer = $consumer;
-      // $this->task = $task;
+      $this->task = $task;
     }
 
     /**
@@ -35,7 +35,8 @@ class TaskCompletedProvider extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        // return ['mail', 'database'];
+        return ['database'];
     }
 
     /**
@@ -57,7 +58,7 @@ class TaskCompletedProvider extends Notification
         "type" => "Task Completed Provider",
         "provider_id" => $this->provider->id,
         "consumer_id" => $this->consumer->id,
-        // "task_id" => $this->task->id,
+        "task_id" => $this->task->id,
       ];
     }
 

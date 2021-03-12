@@ -38,7 +38,7 @@
               @if($task->status == 2)
               <div class="blue-grey-text margintop">
                 <p>Review:</p>
-                <p class="small-text">{{ $task->review()->first()->text }}</p>
+                <p class="small-text">{{ $task->review()->first()->text ?? '' }}</p>
               </div>
               @else
 

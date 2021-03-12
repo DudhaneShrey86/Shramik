@@ -43,28 +43,28 @@ $date = date_format($date, "jS F Y - H:i:s a");
             <div class="col s12">
               <p class="blue-grey-text">Locality: <b>{{ $task->provider()->first()->locality }}</b></p>
             </div>
+            <div class="col s12">
+              <br>
+              <?php
+              if($task->status == 0){
+                ?>
+                <p class="grey-text text-lighten-1">Task cancelled</p>
+                <?php
+              }
+              else if($task->status == 1){
+                ?>
+                <p class="green-text text-darken-1">Working on the task...</p>
+                <?php
+              }
+              else{
+                ?>
+                <p class="grey-text text-lighten-1">Task finished</p>
+                <?php
+              }
+              ?>
+            </div>
           </div>
           <div class="">
-            <?php
-            if($task->status == 0){
-              ?>
-              <p class="grey-text text-lighten-1">Task cancelled</p>
-              <?php
-            }
-            else if($task->status == 1){
-              ?>
-              <p class="green-text text-darken-1">Working on the task...</p>
-              <?php
-            }
-            else{
-              ?>
-              <p class="grey-text text-lighten-1">Task finished</p>
-              <?php
-            }
-            ?>
-          </div>
-          <div class="">
-            <br>
             <a href="{{ route('providers.index') }}" class="btn-flat blue-text waves-effect"><i class="material-icons left">chevron_left</i> Back</a>
           </div>
           <div class="modal" id="cancelmodal">
@@ -94,7 +94,7 @@ $date = date_format($date, "jS F Y - H:i:s a");
           </div>
           <div class="customrow">
             <p>Task By: </p>
-            <p><b><a href="{{ route('consumers.profile', $task->consumer()->first()->id) }}" class="underlined">{{ $task->consumer()->first()->name }}</a> </b></p>
+            <p><b>{{ $task->consumer()->first()->name }}</b></p>
           </div>
           <div class="customrow">
             <p>Task Status: </p>

@@ -32,6 +32,8 @@
           @php
           $data = $notification->data;
           $type = $data['type'];
+          $task = Auth::guard('consumer')->user()->tasks()->find($data['task_id']);
+          $provider = $task->provider()->find($data['provider_id']);
           @endphp
           <?php
           switch($type){
@@ -40,7 +42,7 @@
             <div class="customcard">
               <h6>Task Cancelled</h6>
               <div class="content">
-                <p>You cancelled the task - "<a href="#" class="underlined">Some Task</a>" for <a href="#" class="underlined">Some Provider</a></p>
+                <p>You cancelled the task - "<a href="{{ route('consumers.task.show', $task->id) }}" class="underlined">{{ $task->title }}</a>" for <b>{{ $provider->name }}</b> </p>
                 <p>No worries! You will find the best provider for your task.</p>
                 <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
@@ -54,8 +56,8 @@
             <div class="customcard">
               <h6>Hired a Provider</h6>
               <div class="content">
-                <p>You hired <a href="#" class="underlined">Some Provider</a> for the task "<a href="#" class="underlined">Some Task Name</a>"</p>
-                <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
+                <p>You hired <b>{{ $provider->name }}</b> for the task "<a href="{{ route('consumers.task.show', $task->id) }}" class="underlined">{{ $task->title }}</a>"</p>
+                <a href="{{ route('consumers.task.show', $task->id) }}" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
             </div>
 
@@ -67,7 +69,7 @@
             <div class="customcard">
               <h6>Review Given</h6>
               <div class="content">
-                <p>You submitted a review for <a href="#" class="underlined">Some Provider</a> for their performance on the task "<a href="#" class="underlined">Some Task</a>"</p>
+                <p>You submitted a review for <b>{{ $provider->name }}</b> for their performance on the task "<a href="{{ route('consumers.task.show', $task->id) }}" class="underlined">{{ $task->title }}</a>"</p>
                 <div class="rating-div">
                   <p><b>Rating Given: <span>4.5/5</span></b></p>
                   <span class="rating-span">
@@ -81,7 +83,7 @@
                     ?>
                   </span>
                 </div>
-                <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
+                <a href="{{ route('consumers.task.show', $task->id) }}" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
             </div>
 
@@ -93,9 +95,9 @@
             <div class="customcard">
               <h6>Task Completed</h6>
               <div class="content">
-                <p>The task "<a href="#" class="underlined">Some Task</a>" <a href="#" class="underlined">Some Provider</a> by was completed succesfully! </p>
+                <p>The task "<a href="{{ route('consumers.task.show', $task->id) }}" class="underlined">{{ $task->title }}</a>" by <b>{{ $provider->name }}</b> was completed succesfully! </p>
                 <p>Thank You for using our platform!</p>
-                <a href="#" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
+                <a href="{{ route('consumers.task.show', $task->id) }}" class="btn btn-small blue fullbuttons2 margintop">Go To Task</a>
               </div>
             </div>
 

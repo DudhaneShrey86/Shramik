@@ -38,12 +38,12 @@
               @if($task->status == 2)
               <div class="blue-grey-text margintop">
                 <p>Review Given:</p>
-                <p class="small-text">{{ $task->review()->first()->text }}</p>
+                <p class="small-text">{{ $task->review()->first()->text ?? '' }}</p>
               </div>
               @else
 
               @endif
-              <p class="marginbottom"><small class="right">Created On: {{$date}}</small> </p>
+              <p class=""><small class="">Created On: {{$date}}</small> </p>
             </div>
           </div>
           @empty
@@ -56,7 +56,7 @@
 
           </div>
           <div class="" id="cancelled">
-            
+
           </div>
         </div>
       </div>

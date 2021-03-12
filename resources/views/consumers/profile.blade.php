@@ -183,6 +183,7 @@ function time_elapsed_string($datetime, $full = false) {
               <div class="col s12 l6">
                 <p><a href="{{ route('consumers.task.show', $task->id) }}" target="_blank" class="underlined">{{ $task->title }}</a></p>
               </div>
+              @if($review != null)
               <div class="col s12 l6 rightonlarge">
                 <span>
                   <?php
@@ -213,6 +214,7 @@ function time_elapsed_string($datetime, $full = false) {
                   <i>"{{ $review->text }}"</i>
                 </p>
               </div>
+              @endif
               <div class="col s12">
                 <p>- <a href="#" class="underlined">{{ $provider->name }}</a> </p>
               </div>

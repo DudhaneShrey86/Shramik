@@ -36,7 +36,6 @@ function search(v){
 function setvalues(){
   latitude = $('#latitude').val();
   longitude = $('#longitude').val();
-  console.log(latitude);
 }
 
 function setPosition(){

@@ -14,7 +14,6 @@
       <div class="card-content">
         <h5>Provider Details</h5>
         <div class="divider">
-
         </div>
         <div class="row">
           <div class="col s12">
@@ -118,6 +117,8 @@
           <div class="col s12" id="start-task-form">
             <form action="{{ route('consumers.hire.start', $provider->id) }}" method="post">
               @csrf
+              <input type="hidden" id="distance" value="{{ request()->distance }}">
+              <input type="hidden" id="rating" value="{{ request()->rating }}">
               <br>
               <h6>Start the Task</h6>
               <div class="input-field">
@@ -141,4 +142,5 @@
 @endsection
 @section('scripts')
 <script src="/js/confirmmodals.js" charset="utf-8"></script>
+<script src="/js/setlocalvalues.js" charset="utf-8"></script>
 @endsection

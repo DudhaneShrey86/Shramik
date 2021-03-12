@@ -29,7 +29,8 @@ class RejectedApplication extends Notification
   */
   public function via($notifiable)
   {
-    return ['mail', 'database'];
+    // return ['mail', 'database'];
+    return ['database'];
   }
 
   /**
@@ -43,7 +44,7 @@ class RejectedApplication extends Notification
     return (new MailMessage)
     ->greeting('Hello '.$notifiable->name)
     ->line('We are sorry to tell you that your account was rejected by our admins.')
-    ->line('This means you will not be seen in our search list as long as you update your documents')
+    ->line('This means you will no longer be seen in our search list until you update your documents')
     ->line('You can go through our guidelines on how to rank high in our search list')
     ->line('If you genuinely think this was a mistake, please kindly resubmit your documents')
     ->line('Keep trying! You will succeed');
