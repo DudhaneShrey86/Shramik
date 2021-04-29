@@ -135,7 +135,9 @@ class ConsumerController extends Controller
         array_push($providers_id_arr, $value->id);
       }
       $recommended_upcoming_task = $recommended_upcoming_task->whereIn('provider_id', $providers_id_arr)->take(1)->get();
-      $upcoming_provider = Provider::where('id', $recommended_upcoming_task[0]->provider_id)->first();
+      if(count($recommended_upcoming_task) > 0){
+        $upcoming_provider = Provider::where('id', $recommended_upcoming_task[0]->provider_id)->first();
+      }
     }
     else{
       // $providers = Provider::where([
