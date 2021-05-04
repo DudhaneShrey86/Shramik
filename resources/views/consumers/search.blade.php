@@ -126,6 +126,41 @@ function time_elapsed_string($datetime, $full = false) {
           </form>
         </div>
       </div>
+      @if(isset($providers))
+      <table id="table">
+        <tr>
+          <th>id</th>
+          <th>distance</th>
+          <th>rating</th>
+          <th>no_</th>
+          <th>verified</th>
+        </tr>
+        @forelse($providers as $provider)
+        @php
+        $avg_rating = 0;
+        $reviews = $provider->reviews()->get();
+        $count = count($reviews);
+        if($count != 0){
+          $v = 0;
+          foreach($reviews as $review){
+            $v += $review->rating;
+          }
+          $avg_rating = $v / $count;
+        }
+        $distance = getDistance($provider->latitude, $provider->longitude, $latitude, $longitude);
+        @endphp
+        <tr>
+          <td>{{ $provider->id }}</td>
+          <td>{{ $distance }}</td>
+          <td>{{ $avg_rating }}</td>
+          <td>{{ $count }}</td>
+          <td>{{ $provider->is_approved }}</td>
+        </tr>
+        @empty
+
+        @endforelse
+      </table>
+      @endif
     </div>
     <div id="big-div">
       @if(isset($providers))
@@ -144,13 +179,12 @@ function time_elapsed_string($datetime, $full = false) {
                 <span></span>
                 <span></span>
               </p>
-              <p>Loading results...</p>
+              <p id="loading_text">Loading results...</p>
             </div>
             <div id="tempresults">
               @forelse($providers as $provider)
               @if(
-                count($recommended_provider) != 0 && ($provider->id != $recommended_provider[0]->id) ||
-                $upcoming_provider != null && ($provider->id != $upcoming_provider->id)
+                ($recommended_provider == null || count($recommended_provider) == 0 || ($provider->id != $recommended_provider[0]->id)) && ($upcoming_provider == null || $provider->id != $upcoming_provider->id)
               )
               @php
               $avg_rating = 0;
@@ -242,7 +276,7 @@ function time_elapsed_string($datetime, $full = false) {
               </div>
               @endforelse
             </div>
-            @if(count($recommended_provider) != 0)
+            @if($recommended_provider != null && count($recommended_provider) != 0)
             <div id="recommended-slot">
               @php
               $avg_rating = 0;

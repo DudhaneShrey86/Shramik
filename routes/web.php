@@ -90,5 +90,8 @@ Route::prefix('/consumers')->group(function(){
   Route::get('/profile/{consumer}', [App\Http\Controllers\ConsumerController::class, 'showProfile'])->name('consumers.profile');
   Route::post('/profile/{consumer}', [App\Http\Controllers\ConsumerController::class, 'updateProfile'])->name('consumers.profile.submit');
 
+  // ajax
+  Route::post('/sortResults', [App\Http\Controllers\ConsumerController::class, 'sortResults']);
+
   Route::post('/setlocation/{consumer}', [App\Http\Controllers\ConsumerController::class, 'setLocation'])->name('consumers.setlocation');
 });

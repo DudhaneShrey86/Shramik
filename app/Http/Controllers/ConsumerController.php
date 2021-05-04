@@ -105,7 +105,7 @@ class ConsumerController extends Controller
       ])->whereNotNull('latitude')
       ->orderBy(DB::raw('ABS(latitude - '.$latitude.') + ABS(longitude - '.$longitude.')'), 'ASC')
       ->orderBy('reviews_gained', 'DESC')
-      ->get();
+      ->take(15)->get();
 
       // $recommended_provider = Provider::where(function($query) use ($avg_rating, $deviation_rating){
       //
@@ -156,11 +156,17 @@ class ConsumerController extends Controller
         ['is_approved', '<>', 0],
       ])
       ->orderBy('reviews_gained', 'DESC')
-      ->get();
+      ->take(15)->get();
     }
 
     // dd(count($recommended_provider));
     return view('consumers.search', ['types' => $types, 'localities' => $localities, 'recommended_provider' => $recommended_provider, 'upcoming_provider' => $upcoming_provider, 'providers' => $providers, 'latitude' => $latitude, 'longitude' => $longitude]);
+  }
+
+  public function sortResults(){
+    $arr = request()->arr;
+    $results = json_decode(exec("python index.py ".$arr));
+    return $results;
   }
 
   public function showHirePage(Provider $provider){

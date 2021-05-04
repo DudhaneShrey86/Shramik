@@ -1,48 +1,49 @@
 var scorearr = [];
+var resultarr = [];
 
-function sortResults(){
-  $('#loading').addClass('active');
-  $('#tempresults .itema').each(function(){
-    var score = 0;
-    var reviews = parseInt($(this).find('#result-review-rating').data('reviews'));
-    var ratings = parseFloat($(this).find('#result-review-rating').data('ratings'));
-    var distance = parseFloat($(this).find('#result-distance').text());
-    var verified = parseInt($(this).find('#result-verified').length);
-    var verified_score = -5;
-    if(verified == 1){
-      verified_score = 10;
-    }
-    var time_elapsed = parseInt($(this).find('#result-last-seen').data('days'));
-    var time_to_divide = 24; // minutes
-    if(time_elapsed != 0){
-      time_to_divide = time_to_divide * time_elapsed;
-    }
-    if(ratings != 0){
-      if(reviews == 0 || reviews == 1){
-        score = (1 * Math.pow(2, ratings)) + (3/distance) + (verified_score) + (1/time_to_divide);
-      }
-      else{
-        score = (Math.log2(reviews) * Math.pow(2, ratings)) + (3/distance) + (verified_score) + (1/time_to_divide);
-      }
-    }
-    else{
-      score = (3/distance) + (verified_score) + (1/time_to_divide);
-    }
-    score = parseFloat(score.toFixed(4));
-    scorearr.push(score);
-    $(this).attr('data-score', score);
-  });
-  // sort and append to sorted results
-  scorearr.sort(function(a, b){
-    return b - a;
-  });
-
-  //appending results
-  scorearr.forEach((item, i) => {
-    $('#tempresults [data-score="'+item+'"]').appendTo('#sortedresults');
-  });
-  $('#loading').removeClass('active');
-}
+// function sortResults(){
+//   $('#loading').addClass('active');
+//   $('#tempresults .itema').each(function(){
+//     var score = 0;
+//     var reviews = parseInt($(this).find('#result-review-rating').data('reviews'));
+//     var ratings = parseFloat($(this).find('#result-review-rating').data('ratings'));
+//     var distance = parseFloat($(this).find('#result-distance').text());
+//     var verified = parseInt($(this).find('#result-verified').length);
+//     var verified_score = -5;
+//     if(verified == 1){
+//       verified_score = 10;
+//     }
+//     var time_elapsed = parseInt($(this).find('#result-last-seen').data('days'));
+//     var time_to_divide = 24; // minutes
+//     if(time_elapsed != 0){
+//       time_to_divide = time_to_divide * time_elapsed;
+//     }
+//     if(ratings != 0){
+//       if(reviews == 0 || reviews == 1){
+//         score = (1 * Math.pow(2, ratings)) + (3/distance) + (verified_score) + (1/time_to_divide);
+//       }
+//       else{
+//         score = (Math.log2(reviews) * Math.pow(2, ratings)) + (3/distance) + (verified_score) + (1/time_to_divide);
+//       }
+//     }
+//     else{
+//       score = (3/distance) + (verified_score) + (1/time_to_divide);
+//     }
+//     score = parseFloat(score.toFixed(4));
+//     scorearr.push(score);
+//     $(this).attr('data-score', score);
+//   });
+//   // sort and append to sorted results
+//   scorearr.sort(function(a, b){
+//     return b - a;
+//   });
+//
+//   //appending results
+//   scorearr.forEach((item, i) => {
+//     $('#tempresults [data-score="'+item+'"]').appendTo('#sortedresults');
+//   });
+//   $('#loading').removeClass('active');
+// }
 
 function setValues(){
   // localStorage.removeItem('ratings');
@@ -106,10 +107,51 @@ function setValues(){
 //   localStorage.setItem('ratings', JSON.stringify(ratings));
 // }
 
+function sortResults2(){
+  var arr = [];
+  var idarr = []
+  var table = document.getElementById("table");
+  var rowlen = table.rows.length;
+  $('#loading').addClass('active');
+  $('#loading_text').html('Sorting results');
+  var celllen = 5;
+  for (var i = 1; i < rowlen; i++) {
+    var subarr = []
+    idarr.push(table.rows[i].cells[0].innerHTML);
+    for (var j = 1; j < celllen; j++){
+      subarr.push(table.rows[i].cells[j].innerHTML);
+    }
+    arr.push(subarr);
+  }
+  arr = JSON.stringify(arr);
+  $.ajax({
+    type: "POST",
+    url: '/consumers/sortResults',
+    data: {
+      arr: arr,
+      idarr: idarr,
+    },
+    success: function(dataarr){
+      console.log(dataarr);
+      idarr.forEach((item, i) => {
+        $('#tempresults [data-id="'+item+'"]').attr('data-probability', dataarr[i]);
+      });
+      dataarr.sort(function(a, b){
+        return b - a;
+      });
+      dataarr.forEach((item, i) => {
+        $('#tempresults [data-probability="'+item+'"]').appendTo('#sortedresults');
+      });
+      $('#loading').removeClass('active');
+    }
+  });
+}
+
 $(document).ready(function(){
   // temp();
   if($('#search').length != 0){
-    sortResults();
+    // sortResults();
+    sortResults2();
   }
   else{
     // setting avg and deviation values
