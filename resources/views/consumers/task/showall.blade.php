@@ -13,7 +13,7 @@
   @endif
   <div class="row">
     <div class="col s12">
-      <div class="card">
+      <div class="card" style="min-height: 50vh;">
         <ul class="tabs">
           <li class="tab col s3"><a href="#active">Active Tasks</a> </li>
           <li class="tab col s3"><a href="#finished">Finished Tasks</a> </li>
